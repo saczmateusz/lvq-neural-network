@@ -164,11 +164,11 @@ dataset_split = cross_validation_split(dataset, 10)
 
 # evaluate algorithm
 
-f4 = open('output7.txt', 'w')
-f5 = open('output8.txt', 'w')
-f6 = open('output9.txt', 'w')
+f4 = open('output10.txt', 'w')
+f5 = open('output11.txt', 'w')
+f6 = open('output12.txt', 'w')
 
-how = 20
+how = 40
 
 #learn_rate = 0.03
 n_epochs = 10
@@ -178,13 +178,13 @@ for learn_rate in range(how):
     for n_codebooks in range(how):
         starttime = time.time()
         scores = evaluate_algorithm(
-            dataset_split, learning_vector_quantization, (n_codebooks + 1) * how, float((learn_rate + 1)/how), n_epochs)
+            dataset_split, learning_vector_quantization, int(n_codebooks * (100/how) + (100/how)), float((learn_rate + 1)/how), n_epochs)
         elapsedtime = time.time() - starttime
         print('PARAMETERS: LR %.2f, EPOCH %d, NEURONS %d, TIME [s]: %d' %
-              (float((learn_rate + 1)/how), n_epochs, (n_codebooks + 1) * how, elapsedtime))
+              (float((learn_rate + 1)/how), n_epochs, int(n_codebooks * (100/how) + (100/how)), elapsedtime))
         #print('Scores: %s' % scores)
         f4.write('%.2f\n' % float((learn_rate + 1)/how))
-        f5.write('%d\n' % ((n_codebooks + 1) * how))
+        f5.write('%d\n' % int(n_codebooks * (100/how) + (100/how)))
         result = sum(scores)/float(len(scores))
         print('Mean Accuracy: %.2f%%' % result)
         f6.write('%.2f\n' % result)
