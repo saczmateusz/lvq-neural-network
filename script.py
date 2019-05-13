@@ -3,8 +3,12 @@ from random import seed
 from random import randrange
 from math import sqrt
 from csv import reader
+import time
+
 
 # Load a CSV file
+
+
 def load_csv(filename):
     dataset = list()
     with open(filename, 'r') as file:
@@ -16,27 +20,22 @@ def load_csv(filename):
     return dataset
 
 # Convert string column to float
+
+
 def str_column_to_float(dataset, column):
     for row in dataset:
         row[column] = float(row[column].strip())
 
 # Convert string column to integer
+
+
 def str_column_to_integer(dataset, column):
     for row in dataset:
         row[column] = int(row[column].strip())
 
-# Convert string column to integer
-def str_column_to_int(dataset, column):
-    class_values = [row[column] for row in dataset]
-    unique = set(class_values)
-    lookup = dict()
-    for i, value in enumerate(unique):
-        lookup[value] = i
-    for row in dataset:
-        row[column] = lookup[row[column]]
-    return lookup
-
 # Split a dataset into k folds
+
+
 def cross_validation_split(dataset, n_folds):
     dataset_split = list()
     dataset_copy = list(dataset)
@@ -50,6 +49,8 @@ def cross_validation_split(dataset, n_folds):
     return dataset_split
 
 # Calculate accuracy percentage
+
+
 def accuracy_metric(actual, predicted):
     correct = 0
     for i in range(len(actual)):
@@ -58,10 +59,15 @@ def accuracy_metric(actual, predicted):
     return correct / float(len(actual)) * 100.0
 
 # Evaluate an algorithm using a cross validation split
-def evaluate_algorithm(dataset, algorithm, n_folds, *args):
-    folds = cross_validation_split(dataset, n_folds)
+
+
+def evaluate_algorithm(folds, algorithm, *args):
+    # folds = cross_validation_split(dataset, n_folds)
     scores = list()
+    iterator = 1
     for fold in folds:
+        #print('Fold: %d' % iterator)
+        iterator += 1
         train_set = list(folds)
         train_set.remove(fold)
         train_set = sum(train_set, [])
@@ -77,6 +83,8 @@ def evaluate_algorithm(dataset, algorithm, n_folds, *args):
     return scores
 
 # calculate the Euclidean distance between two vectors
+
+
 def euclidean_distance(row1, row2):
     distance = 0.0
     for i in range(len(row1)-1):
@@ -84,6 +92,8 @@ def euclidean_distance(row1, row2):
     return sqrt(distance)
 
 # Locate the best matching unit
+
+
 def get_best_matching_unit(codebooks, test_row):
     distances = list()
     for codebook in codebooks:
@@ -93,19 +103,25 @@ def get_best_matching_unit(codebooks, test_row):
     return distances[0][0]
 
 # Make a prediction with codebook vectors
+
+
 def predict(codebooks, test_row):
     bmu = get_best_matching_unit(codebooks, test_row)
     return bmu[-1]
 
 # Create a random codebook vector
+
+
 def random_codebook(train):
     n_records = len(train)
     n_features = len(train[0])
     codebook = [train[randrange(n_records)][i] for i in range(n_features)]
-    #print(codebook)
+    # print(codebook)
     return codebook
 
 # Train a set of codebook vectors
+
+
 def train_codebooks(train, n_codebooks, lrate, epochs):
     codebooks = [random_codebook(train) for i in range(n_codebooks)]
     for epoch in range(epochs):
@@ -118,10 +134,13 @@ def train_codebooks(train, n_codebooks, lrate, epochs):
                     bmu[i] += rate * error
                 else:
                     bmu[i] -= rate * error
-        print(epoch)
+        # if epoch % 100 == 0:
+            #print('Epoch: %d' % epoch)
     return codebooks
 
 # LVQ Algorithm
+
+
 def learning_vector_quantization(train, test, n_codebooks, lrate, epochs):
     codebooks = train_codebooks(train, n_codebooks, lrate, epochs)
     predictions = list()
@@ -130,23 +149,54 @@ def learning_vector_quantization(train, test, n_codebooks, lrate, epochs):
         predictions.append(output)
     return(predictions)
 
+
 # Test LVQ on Ionosphere dataset
 seed(1)
 # load and prepare data
-filename = 'tic-tac2.csv'
+filename = 'data.csv'
 dataset = load_csv(filename)
 for i in range(len(dataset[0])-1):
     str_column_to_float(dataset, i)
 # convert class column to integers
-str_column_to_int(dataset, len(dataset[0])-1)
+str_column_to_integer(dataset, len(dataset[0])-1)
+
+dataset_split = cross_validation_split(dataset, 10)
+
 # evaluate algorithm
-n_folds = 10
-learn_rate = 0.45
-n_epochs = 100
-n_codebooks = 50
-scores = evaluate_algorithm(dataset, learning_vector_quantization, n_folds, n_codebooks, learn_rate, n_epochs)
-print('Scores: %s' % scores)
-print('Mean Accuracy: %.3f%%' % (sum(scores)/float(len(scores))))
+
+f4 = open('output7.txt', 'w')
+f5 = open('output8.txt', 'w')
+f6 = open('output9.txt', 'w')
+
+how = 20
+
+#learn_rate = 0.03
+n_epochs = 10
+#n_codebooks = 100
+for learn_rate in range(how):
+    # for n_epochs in range(100, 500, 100):
+    for n_codebooks in range(how):
+        starttime = time.time()
+        scores = evaluate_algorithm(
+            dataset_split, learning_vector_quantization, (n_codebooks + 1) * how, float((learn_rate + 1)/how), n_epochs)
+        elapsedtime = time.time() - starttime
+        print('PARAMETERS: LR %.2f, EPOCH %d, NEURONS %d, TIME [s]: %d' %
+              (float((learn_rate + 1)/how), n_epochs, (n_codebooks + 1) * how, elapsedtime))
+        #print('Scores: %s' % scores)
+        f4.write('%.2f\n' % float((learn_rate + 1)/how))
+        f5.write('%d\n' % ((n_codebooks + 1) * how))
+        result = sum(scores)/float(len(scores))
+        print('Mean Accuracy: %.2f%%' % result)
+        f6.write('%.2f\n' % result)
+# starttime = time.time()
+# scores = evaluate_algorithm(
+#     dataset_split, learning_vector_quantization, n_codebooks, learn_rate, n_epochs)
+# elapsedtime = time.time() - starttime
+# print('Params: LR %.2f%% EP %d NV %d time: %d' %
+#       (learn_rate, n_epochs, n_codebooks, elapsedtime))
+# print('Scores: %s' % scores)
+# print('Mean Accuracy: %.3f%%' % (sum(scores)/float(len(scores))))
+
 
 # dopracowac wybor danych do podzbioru
 # lrate = [0.01 0.1:0.1:0.9 0.95 0.99 1.0]
@@ -154,3 +204,13 @@ print('Mean Accuracy: %.3f%%' % (sum(scores)/float(len(scores))))
 # 1. ilosc epok
 # 2. ilosc neuronow
 # 3. learning rate
+
+
+# f = open('output3.txt', 'w')
+# for i in range(100):
+#     w = randrange(3) + 1
+#     f.write('%d\n' % w)
+# f.close()
+f4.close()
+f5.close()
+f6.close()
