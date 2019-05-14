@@ -4,9 +4,15 @@ from random import randrange
 from math import sqrt
 from csv import reader
 import time
+import matplotlib
+import matplotlib.pyplot as plt
 
 
 # Load a CSV file
+# fcp = open('class1.txt', 'w')
+# fca = open('class2.txt', 'w')
+fcp = list()
+fca = list()
 
 
 def load_csv(filename):
@@ -56,6 +62,10 @@ def accuracy_metric(actual, predicted):
     for i in range(len(actual)):
         if actual[i] == predicted[i]:
             correct += 1
+        # fcp.write('%d' % predicted[i])
+        # fca.write('%d' % actual[i])
+        fcp.append(predicted[i])
+        fca.append(actual[i])
     return correct / float(len(actual)) * 100.0
 
 # Evaluate an algorithm using a cross validation split
@@ -66,7 +76,7 @@ def evaluate_algorithm(folds, algorithm, *args):
     scores = list()
     iterator = 1
     for fold in folds:
-        #print('Fold: %d' % iterator)
+        # print('Fold: %d' % iterator)
         iterator += 1
         train_set = list(folds)
         train_set.remove(fold)
@@ -135,7 +145,7 @@ def train_codebooks(train, n_codebooks, lrate, epochs):
                 else:
                     bmu[i] -= rate * error
         # if epoch % 100 == 0:
-            #print('Epoch: %d' % epoch)
+            # print('Epoch: %d' % epoch)
     return codebooks
 
 # LVQ Algorithm
@@ -164,39 +174,56 @@ dataset_split = cross_validation_split(dataset, 10)
 
 # evaluate algorithm
 
-f4 = open('output10.txt', 'w')
-f5 = open('output11.txt', 'w')
-f6 = open('output12.txt', 'w')
+f4 = open('o100utput13.txt', 'w')
+f5 = open('o100utput14.txt', 'w')
+f6 = open('o100utput15.txt', 'w')
 
-how = 40
+learn_rate_list = list()
+for i in range(9):
+    learn_rate_list.append(float((i+1)/100))
 
-#learn_rate = 0.03
-n_epochs = 10
-#n_codebooks = 100
-for learn_rate in range(how):
+for i in range(10):
+    learn_rate_list.append(float((i+1)/10))
+
+n_codebooks = list()
+for i in range(10):
+    n_codebooks.append((i+1) * 10)
+
+# learn_rate = 0.05
+n_epochs = 100
+# n_codebooks = 1
+
+
+for learn_rate in learn_rate_list:
     # for n_epochs in range(100, 500, 100):
-    for n_codebooks in range(how):
+    for n_codebook in n_codebooks:
+        # n_neurons = (n_codebooks + 1) * 10
         starttime = time.time()
         scores = evaluate_algorithm(
-            dataset_split, learning_vector_quantization, int(n_codebooks * (100/how) + (100/how)), float((learn_rate + 1)/how), n_epochs)
+            dataset_split, learning_vector_quantization, n_codebook, learn_rate, n_epochs)
         elapsedtime = time.time() - starttime
-        print('PARAMETERS: LR %.2f, EPOCH %d, NEURONS %d, TIME [s]: %d' %
-              (float((learn_rate + 1)/how), n_epochs, int(n_codebooks * (100/how) + (100/how)), elapsedtime))
-        #print('Scores: %s' % scores)
-        f4.write('%.2f\n' % float((learn_rate + 1)/how))
-        f5.write('%d\n' % int(n_codebooks * (100/how) + (100/how)))
+        print('PARAMETERS: LR %.2f, EPOCH %d, NEURONS %d, TIME [s]: %d' % (
+            learn_rate, n_epochs, n_codebook, elapsedtime))
+        # print('Scores: %s' % scores)
+        f4.write('%.2f\n' % learn_rate)
+        f5.write('%d\n' % n_codebook)
         result = sum(scores)/float(len(scores))
         print('Mean Accuracy: %.2f%%' % result)
         f6.write('%.2f\n' % result)
+
+
 # starttime = time.time()
 # scores = evaluate_algorithm(
-#     dataset_split, learning_vector_quantization, n_codebooks, learn_rate, n_epochs)
+#     dataset_split, learning_vector_quantization, int(n_codebooks * (100/how) + (100/how)), float((learn_rate + 1)/how), n_epochs)
 # elapsedtime = time.time() - starttime
-# print('Params: LR %.2f%% EP %d NV %d time: %d' %
-#       (learn_rate, n_epochs, n_codebooks, elapsedtime))
-# print('Scores: %s' % scores)
-# print('Mean Accuracy: %.3f%%' % (sum(scores)/float(len(scores))))
-
+# print('PARAMETERS: LR %.2f, EPOCH %d, NEURONS %d, TIME [s]: %d' %
+#       (float((learn_rate + 1)/how), n_epochs, int(n_codebooks * (100/how) + (100/how)), elapsedtime))
+# #print('Scores: %s' % scores)
+# #f4.write('%.2f\n' % float((learn_rate + 1)/how))
+# #f5.write('%d\n' % int(n_codebooks * (100/how) + (100/how)))
+# result = sum(scores)/float(len(scores))
+# print('Mean Accuracy: %.2f%%' % result)
+# f6.write('%.2f\n' % result)
 
 # dopracowac wybor danych do podzbioru
 # lrate = [0.01 0.1:0.1:0.9 0.95 0.99 1.0]
@@ -214,3 +241,31 @@ for learn_rate in range(how):
 f4.close()
 f5.close()
 f6.close()
+
+
+# fcp.sort()
+# fca.sort()
+
+# x = list()
+
+# for i in range(len(fcp)):
+#     x.append(i)
+
+# lines = plt.plot(x, fcp, x, fca)
+# #ax.plot(fcp, color='blue')
+# #bx.plot(fca, color='red')
+# # plt.setp(lines[0], color='blue')
+# # plt.setp(lines[1], color='red')
+# plt.setp(lines[0], linestyle='none', marker='.', markersize='2', color='blue')
+# plt.setp(lines[1], linestyle='none', marker='.', markersize='2', color='red')
+# # ax.set(xlabel='time (s)', ylabel='voltage (mV)',
+# #        title='About as simple as it gets, folks')
+# # ax.grid()
+# # bx.grid()
+
+# # fig.savefig("test.png")
+# plt.show()
+
+# plt.plot(fca)
+
+# plt.plot(fcp)
