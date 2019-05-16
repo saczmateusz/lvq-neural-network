@@ -174,9 +174,9 @@ dataset_split = cross_validation_split(dataset, 10)
 
 # evaluate algorithm
 
-f4 = open('o100utput13.txt', 'w')
-f5 = open('o100utput14.txt', 'w')
-f6 = open('o100utput15.txt', 'w')
+f4 = open('epoch_10-100_nv_90_lr_03_1_lr.txt', 'w')
+f5 = open('epoch_10-100_nv_90_lr_03_2_ep.txt', 'w')
+f6 = open('epoch_10-100_nv_90_lr_03_3_pk.txt', 'w')
 
 learn_rate_list = list()
 for i in range(9):
@@ -185,59 +185,82 @@ for i in range(9):
 for i in range(10):
     learn_rate_list.append(float((i+1)/10))
 
+learn_rate_list.append(0.99)
+learn_rate_list.sort()
+
 n_codebooks = list()
+for i in range(20):
+    n_codebooks.append((i * 15) + 15)
+
+n_epochs = list()
 for i in range(10):
-    n_codebooks.append((i+1) * 10)
+    n_epochs.append((i+1) * 10)
 
-# learn_rate = 0.05
-n_epochs = 100
-# n_codebooks = 1
+learn_rate = 0.3
+# n_epoch = 10
+n_codebook = 90
+
+# n_cd_change = 0
+
+# for learn_rate in learn_rate_list:
+#     for n_codebook in n_codebooks:
+#         n_cdb = int(n_codebook / 10) * 10 + 10
+#         if n_cd_change != n_cdb:
+#             if n_cdb <= 100:
+#                 starttime = time.time()
+#                 scores = evaluate_algorithm(
+#                     dataset_split, learning_vector_quantization, n_codebook, learn_rate, n_epochs)
+#                 elapsedtime = time.time() - starttime
+#                 print('PARAMETERS: LR %.2f, EPOCH %d, NEURONS %d, TIME [s]: %d' % (
+#                     learn_rate, n_epochs, n_codebook, elapsedtime))
+#                 # print('Scores: %s' % scores)
+#                 f4.write('%.2f\n' % learn_rate)
+#                 f5.write('%d\n' % n_codebook)
+#                 result = sum(scores)/float(len(scores))
+#                 print('Mean Accuracy: %.2f%%' % result)
+#                 f6.write('%.2f\n' % result)
+#                 n_cd_change = n_cdb
+#             else:
+#                 f4.write('%.2f\n' % learn_rate)
+#                 f5.write('%d\n' % n_codebook)
+#                 f6.write('%.2f\n' % result)
+#         else:
+#             f4.write('%.2f\n' % learn_rate)
+#             f5.write('%d\n' % n_codebook)
+#             f6.write('%.2f\n' % result)
 
 
-for learn_rate in learn_rate_list:
+# for learn_rate in learn_rate_list:
     # for n_epochs in range(100, 500, 100):
-    for n_codebook in n_codebooks:
-        # n_neurons = (n_codebooks + 1) * 10
-        starttime = time.time()
-        scores = evaluate_algorithm(
-            dataset_split, learning_vector_quantization, n_codebook, learn_rate, n_epochs)
-        elapsedtime = time.time() - starttime
-        print('PARAMETERS: LR %.2f, EPOCH %d, NEURONS %d, TIME [s]: %d' % (
-            learn_rate, n_epochs, n_codebook, elapsedtime))
-        # print('Scores: %s' % scores)
-        f4.write('%.2f\n' % learn_rate)
-        f5.write('%d\n' % n_codebook)
-        result = sum(scores)/float(len(scores))
-        print('Mean Accuracy: %.2f%%' % result)
-        f6.write('%.2f\n' % result)
+for n_epoch in n_epochs:
+    starttime = time.time()
+    scores = evaluate_algorithm(
+        dataset_split, learning_vector_quantization, n_codebook, learn_rate, n_epoch)
+    elapsedtime = time.time() - starttime
+    print('PARAMETERS: LR %.2f, EPOCH %d, NEURONS %d, TIME [s]: %d' % (
+        learn_rate, n_epoch, n_codebook, elapsedtime))
+    # print('Scores: %s' % scores)
+    f4.write('%.2f\n' % learn_rate)
+    f5.write('%d\n' % n_epoch)
+    result = sum(scores)/float(len(scores))
+    print('Mean Accuracy: %.2f%%' % result)
+    f6.write('%.2f\n' % result)
 
 
 # starttime = time.time()
 # scores = evaluate_algorithm(
-#     dataset_split, learning_vector_quantization, int(n_codebooks * (100/how) + (100/how)), float((learn_rate + 1)/how), n_epochs)
+#     dataset_split, learning_vector_quantization, n_codebooks, learn_rate, n_epochs)
 # elapsedtime = time.time() - starttime
 # print('PARAMETERS: LR %.2f, EPOCH %d, NEURONS %d, TIME [s]: %d' %
-#       (float((learn_rate + 1)/how), n_epochs, int(n_codebooks * (100/how) + (100/how)), elapsedtime))
-# #print('Scores: %s' % scores)
-# #f4.write('%.2f\n' % float((learn_rate + 1)/how))
-# #f5.write('%d\n' % int(n_codebooks * (100/how) + (100/how)))
+#       (learn_rate, n_epochs, n_codebooks, elapsedtime))
+# print('Scores: %s' % scores)
+# #f4.write('%.2f\n' % learn_rate)
+# #f5.write('%d\n' % n_codebooks)
 # result = sum(scores)/float(len(scores))
 # print('Mean Accuracy: %.2f%%' % result)
-# f6.write('%.2f\n' % result)
-
-# dopracowac wybor danych do podzbioru
-# lrate = [0.01 0.1:0.1:0.9 0.95 0.99 1.0]
-# matlab 6.5.1 r2003sp1
-# 1. ilosc epok
-# 2. ilosc neuronow
-# 3. learning rate
+# #f6.write('%.2f\n' % result)
 
 
-# f = open('output3.txt', 'w')
-# for i in range(100):
-#     w = randrange(3) + 1
-#     f.write('%d\n' % w)
-# f.close()
 f4.close()
 f5.close()
 f6.close()
@@ -245,27 +268,20 @@ f6.close()
 
 # fcp.sort()
 # fca.sort()
-
 # x = list()
-
 # for i in range(len(fcp)):
 #     x.append(i)
-
 # lines = plt.plot(x, fcp, x, fca)
-# #ax.plot(fcp, color='blue')
-# #bx.plot(fca, color='red')
-# # plt.setp(lines[0], color='blue')
-# # plt.setp(lines[1], color='red')
-# plt.setp(lines[0], linestyle='none', marker='.', markersize='2', color='blue')
-# plt.setp(lines[1], linestyle='none', marker='.', markersize='2', color='red')
-# # ax.set(xlabel='time (s)', ylabel='voltage (mV)',
-# #        title='About as simple as it gets, folks')
-# # ax.grid()
-# # bx.grid()
-
-# # fig.savefig("test.png")
+# plt.setp(lines[0], color='blue')
+# plt.setp(lines[1], color='red')
+# ax.set(xlabel='time (s)', ylabel='voltage (mV)', title='About as simple as it gets, folks')
+# ax.grid()
 # plt.show()
 
-# plt.plot(fca)
 
-# plt.plot(fcp)
+# dopracowac wybor danych do podzbioru
+# lrate = [0.01 0.1:0.1:0.9 0.95 0.99 1.0]
+# matlab 6.5.1 r2003sp1
+# 1. ilosc epok
+# 2. ilosc neuronow
+# 3. learning rate
