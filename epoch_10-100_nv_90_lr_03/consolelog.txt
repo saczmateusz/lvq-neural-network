@@ -1,0 +1,44 @@
+PS C:\Users\Mateusz\source\repos\lvq-neural-network> python script.py
+PARAMETERS: LR 0.30, EPOCH 10, NEURONS 90, TIME [s]: 44
+Mean Accuracy: 97.89%
+PARAMETERS: LR 0.30, EPOCH 20, NEURONS 90, TIME [s]: 82
+Mean Accuracy: 98.42%
+PARAMETERS: LR 0.30, EPOCH 30, NEURONS 90, TIME [s]: 125
+Mean Accuracy: 97.79%
+PARAMETERS: LR 0.30, EPOCH 40, NEURONS 90, TIME [s]: 164
+Mean Accuracy: 97.47%
+PARAMETERS: LR 0.30, EPOCH 50, NEURONS 90, TIME [s]: 171
+Mean Accuracy: 98.32%
+PARAMETERS: LR 0.30, EPOCH 60, NEURONS 90, TIME [s]: 178
+Mean Accuracy: 98.00%
+PARAMETERS: LR 0.30, EPOCH 70, NEURONS 90, TIME [s]: 212
+Mean Accuracy: 98.32%
+PARAMETERS: LR 0.30, EPOCH 80, NEURONS 90, TIME [s]: 317
+Mean Accuracy: 98.42%
+PARAMETERS: LR 0.30, EPOCH 90, NEURONS 90, TIME [s]: 460
+Mean Accuracy: 97.37%
+PARAMETERS: LR 0.30, EPOCH 100, NEURONS 90, TIME [s]: 457
+Mean Accuracy: 97.05%
+PS C:\Users\Mateusz\source\repos\lvq-neural-network>
+PS C:\Users\Mateusz\source\repos\lvq-neural-network> python script.py
+PARAMETERS: LR 0.30, EPOCH 10, NEURONS 100, TIME [s]: 41
+Mean Accuracy: 98.53%
+PARAMETERS: LR 0.30, EPOCH 20, NEURONS 100, TIME [s]: 78
+Mean Accuracy: 97.89%
+PARAMETERS: LR 0.30, EPOCH 30, NEURONS 100, TIME [s]: 124
+Mean Accuracy: 98.11%
+PARAMETERS: LR 0.30, EPOCH 40, NEURONS 100, TIME [s]: 165
+Mean Accuracy: 97.89%
+PARAMETERS: LR 0.30, EPOCH 50, NEURONS 100, TIME [s]: 211
+Mean Accuracy: 97.58%
+PARAMETERS: LR 0.30, EPOCH 60, NEURONS 100, TIME [s]: 249
+Mean Accuracy: 97.79%
+PARAMETERS: LR 0.30, EPOCH 70, NEURONS 100, TIME [s]: 338
+Mean Accuracy: 98.53%
+PARAMETERS: LR 0.30, EPOCH 80, NEURONS 100, TIME [s]: 389
+Mean Accuracy: 98.32%
+PARAMETERS: LR 0.30, EPOCH 90, NEURONS 100, TIME [s]: 467
+Mean Accuracy: 97.58%
+PARAMETERS: LR 0.30, EPOCH 100, NEURONS 100, TIME [s]: 700
+Mean Accuracy: 97.68%
+PS C:\Users\Mateusz\source\repos\lvq-neural-network>

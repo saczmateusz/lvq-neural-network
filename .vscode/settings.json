@@ -2,7 +2,7 @@
 {
   "editor.formatOnSave": true,
   "editor.insertSpaces": true,
-  "editor.tabSize": 2,
+  "editor.tabSize": 4,
   "files.associations": {
     "*.py": "python"
   }
