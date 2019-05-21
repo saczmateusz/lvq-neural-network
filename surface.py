@@ -9,15 +9,15 @@ x_axis = set()
 y_axis = set()
 z_val = list()
 
-with open('epoch_test_10-100_nv_test_10-100_lr_03/epoch_test_10-100_nv_test_10-100_lr_03_1_cb.txt', 'r') as xf:
+with open('lr_test_001-100_nv_test_10-100_ep_100/lr_test_001-100_nv_test_10-100_ep_100_1_lr.txt', 'r') as xf:
     for x in xf:
         x_axis.add(float(x))
 
-with open('epoch_test_10-100_nv_test_10-100_lr_03/epoch_test_10-100_nv_test_10-100_lr_03_2_ep.txt', 'r') as yf:
+with open('lr_test_001-100_nv_test_10-100_ep_100/lr_test_001-100_nv_test_10-100_ep_100_2_cb.txt', 'r') as yf:
     for y in yf:
         y_axis.add(int(y))
 
-with open('epoch_test_10-100_nv_test_10-100_lr_03/epoch_test_10-100_nv_test_10-100_lr_03_3_pk.txt', 'r') as zf:
+with open('lr_test_001-100_nv_test_10-100_ep_100/lr_test_001-100_nv_test_10-100_ep_100_3_pk.txt', 'r') as zf:
     for z in zf:
         z_val.append(float(z))
 
@@ -48,9 +48,9 @@ surf = ax.plot_surface(X, Y, Z_matrix, rstride=1, cstride=1, cmap=plt.cm.jet)
 ax.zaxis.set_major_locator(LinearLocator(10))
 ax.zaxis.set_major_formatter(FormatStrFormatter('%.02f'))
 
-ax.set_xlabel('CB l_rate')
-ax.set_ylabel('EP neurons')
-ax.set_zlabel('pk %', rotation='vertical', labelpad=7)
+ax.set_xlabel('LR')
+ax.set_ylabel('S')
+ax.set_zlabel('PK [%]', rotation='vertical', labelpad=7)
 
 fig.colorbar(surf, shrink=1, aspect=20)
 
