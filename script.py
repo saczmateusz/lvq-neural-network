@@ -4,8 +4,6 @@ from random import randrange
 from math import sqrt
 from csv import reader
 import time
-import matplotlib
-import matplotlib.pyplot as plt
 
 
 # Load a CSV file
@@ -174,30 +172,30 @@ dataset_split = cross_validation_split(dataset, 10)
 
 # evaluate algorithm
 
-f4 = open('epoch_10-100_nv_90_lr_03_1_lr.txt', 'w')
-f5 = open('epoch_10-100_nv_90_lr_03_2_ep.txt', 'w')
-f6 = open('epoch_10-100_nv_90_lr_03_3_pk.txt', 'w')
+f4 = open('test_1_ep03.txt', 'w')
+f5 = open('test_2_dd.txt', 'w')
+f6 = open('test_3_pk.txt', 'w')
 
-learn_rate_list = list()
-for i in range(9):
-    learn_rate_list.append(float((i+1)/100))
+# learn_rate_list = list()
+# for i in range(9):
+#     learn_rate_list.append(float((i+1)/100))
 
-for i in range(10):
-    learn_rate_list.append(float((i+1)/10))
+# for i in range(10):
+#     learn_rate_list.append(float((i+1)/10))
 
-learn_rate_list.append(0.99)
-learn_rate_list.sort()
+# learn_rate_list.append(0.99)
+# learn_rate_list.sort()
 
-n_codebooks = list()
-for i in range(20):
-    n_codebooks.append((i * 15) + 15)
+# n_codebooks = list()
+# for i in range(10):
+#     n_codebooks.append((i * 10) + 10)
 
 n_epochs = list()
-for i in range(10):
-    n_epochs.append((i+1) * 10)
+for i in range(30):
+    n_epochs.append(((i+1) * 10))
 
 learn_rate = 0.3
-# n_epoch = 10
+#n_epoch = 50
 n_codebook = 90
 
 # n_cd_change = 0
@@ -231,8 +229,8 @@ n_codebook = 90
 
 
 # for learn_rate in learn_rate_list:
-    # for n_epochs in range(100, 500, 100):
 for n_epoch in n_epochs:
+    # for n_codebook in n_codebooks:
     starttime = time.time()
     scores = evaluate_algorithm(
         dataset_split, learning_vector_quantization, n_codebook, learn_rate, n_epoch)
@@ -240,8 +238,8 @@ for n_epoch in n_epochs:
     print('PARAMETERS: LR %.2f, EPOCH %d, NEURONS %d, TIME [s]: %d' % (
         learn_rate, n_epoch, n_codebook, elapsedtime))
     # print('Scores: %s' % scores)
-    f4.write('%.2f\n' % learn_rate)
-    f5.write('%d\n' % n_epoch)
+    f4.write('%.2f\n' % n_epoch)
+    f5.write('%d\n' % n_codebook)
     result = sum(scores)/float(len(scores))
     print('Mean Accuracy: %.2f%%' % result)
     f6.write('%.2f\n' % result)
